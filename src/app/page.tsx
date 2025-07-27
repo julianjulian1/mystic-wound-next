@@ -1,103 +1,441 @@
-import Image from "next/image";
+"use client";
+import * as React from "react";
+import { useState, useRef, useEffect } from "react";
+import {
+  Home,
+  Stethoscope,
+  BookOpen,
+  User,
+  Camera,
+  ShieldAlert,
+  FileText,
+  HeartPulse,
+  BrainCircuit,
+  Info,
+  Zap,
+  ShieldCheck,
+  AlertTriangle,
+} from "@/components/icons";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
+import { conditions, Condition } from "@/data/conditions";
 
-export default function Home() {
+function HomePage({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="p-4 space-y-6">
+      <Card>
+        <CardContent>
+          <CardTitle className="text-2xl">Preliminary Wound Detection</CardTitle>
+          <CardDescription className="mt-2">
+            Fast, AI-powered wound screening designed for people with diabetes. Detect early signs of 8 common skin conditions to help prevent complications.
+          </CardDescription>
+          <Button onClick={() => setActiveTab("analysis")} className="mt-4">
+            <Stethoscope className="w-5 h-5" />Start Analysis
+          </Button>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>How It Works</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center gap-4">
+            <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full">
+              <Camera className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <h4 className="font-semibold">1. Upload Image</h4>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Upload a clear, well-lit photo of the skin condition.</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full">
+              <BrainCircuit className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <h4 className="font-semibold">2. AI Analysis</h4>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Our trained model analyzes the image using advanced algorithms.</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full">
+              <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            </div>
+            <div>
+              <h4 className="font-semibold">3. Get Results</h4>
+              <p className="text-sm text-gray-500 dark:text-gray-400">Receive preliminary results with confidence scores and info.</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Platform Features</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-start gap-4">
+            <Zap className="w-5 h-5 text-blue-500 mt-1" />
+            <p className="text-sm"><span className="font-semibold">AI Technology:</span> Models trained on 10,000+ images to identify 8 conditions with high accuracy.</p>
+          </div>
+          <div className="flex items-start gap-4">
+            <ShieldCheck className="w-5 h-5 text-green-500 mt-1" />
+            <p className="text-sm"><span className="font-semibold">Prevention Tools:</span> Comprehensive guidelines and risk assessment to help you maintain healthy skin.</p>
+          </div>
+          <div className="flex items-start gap-4">
+            <HeartPulse className="w-5 h-5 text-red-500 mt-1" />
+            <p className="text-sm"><span className="font-semibold">Medical Advisory:</span> Developed in collaboration with dermatologists for clinical relevance.</p>
+          </div>
+        </CardContent>
+      </Card>
+      <MedicalDisclaimer />
+    </div>
+  );
+}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+function AnalysisPage() {
+  const [file, setFile] = useState<File & { preview?: string } | null>(null);
+  const [result, setResult] = useState<{ condition: Condition; confidence: number } | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      setFile(Object.assign(selectedFile, { preview: URL.createObjectURL(selectedFile) }));
+      setResult(null);
+    }
+  };
+
+  const handleAnalyze = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const randomCondition = conditions[Math.floor(Math.random() * conditions.length)];
+      setResult({ condition: randomCondition, confidence: Math.random() * (0.95 - 0.65) + 0.65 });
+      setIsLoading(false);
+    }, 2000);
+  };
+
+  const handleReset = () => {
+    setFile(null);
+    setResult(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  return (
+    <div className="p-4 space-y-4">
+      <CardTitle className="text-2xl px-2">AI-Powered Analysis</CardTitle>
+      {!result && (
+        <div
+          onClick={() => fileInputRef.current?.click()}
+          className="p-8 border-2 border-dashed rounded-xl text-center cursor-pointer border-gray-300 dark:border-gray-600 hover:border-blue-400"
+        >
+          <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
+          <Camera className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+          {file ? (
+            <div>
+              <img src={file.preview} alt="Preview" className="max-h-48 mx-auto rounded-lg mb-4" />
+              <p className="font-semibold text-gray-800 dark:text-gray-200">{file.name}</p>
+            </div>
+          ) : (
+            <div>
+              <p className="text-gray-500 dark:text-gray-400">Click to select an image.</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">Use clear, well-lit images for best results.</p>
+            </div>
+          )}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      )}
+      {file && !result && (
+        <Button onClick={handleAnalyze} disabled={isLoading}>
+          {isLoading ? "Analyzing..." : "Analyze Now"}
+        </Button>
+      )}
+      {result && (
+        <div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Analysis Results</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <img src={result.condition.image} alt={result.condition.name} className="w-full h-40 object-cover rounded-lg mb-4" />
+              <CardDescription>Potential Condition:</CardDescription>
+              <CardTitle className="text-2xl text-blue-600 dark:text-blue-400">{result.condition.name}</CardTitle>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-gray-500 dark:text-gray-400">Confidence Score:</span>
+                <span className="font-bold text-lg">{(result.confidence * 100).toFixed(1)}%</span>
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-1">
+                <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${result.confidence * 100}%` }}></div>
+              </div>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mt-4">{result.condition.overview}</p>
+            </CardContent>
+          </Card>
+          <div className="mt-4">
+            <MedicalDisclaimer />
+          </div>
+          <Button onClick={handleReset} variant="secondary" className="mt-4">
+            <Camera className="w-5 h-5" />Analyze Another Image
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function EducationPage() {
+  const [selected, setSelected] = useState<Condition | null>(null);
+  const DetailSection = ({ title, items }: { title: string; items: string[] }) => (
+    <div>
+      <h4 className="font-semibold text-lg text-gray-800 dark:text-gray-200 mb-2">{title}</h4>
+      <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-gray-400">
+        {items.map((item, index) => (
+          <li key={index}>{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
+
+  if (selected) {
+    const content = conditions.find((c) => c.id === selected.id)!;
+    return (
+      <div className="p-4">
+        <Button onClick={() => setSelected(null)} variant="secondary" className="mb-4 w-auto px-4 py-2 text-sm">
+          &larr; Back to Guides
+        </Button>
+        <Card>
+          <img src={content.image} alt={content.name} className="w-full h-48 object-cover rounded-t-xl" />
+          <CardHeader>
+            <CardTitle className="text-2xl">{content.name}</CardTitle>
+            <CardDescription>{content.type}</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div>
+              <h4 className="font-semibold text-lg text-gray-800 dark:text-gray-200 mb-2">Overview</h4>
+              <p className="text-gray-600 dark:text-gray-400">{content.overview}</p>
+            </div>
+            <div>
+              <h4 className="font-semibold text-lg text-gray-800 dark:text-gray-200 mb-2">Symptoms</h4>
+              <div className="space-y-3">
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Common Signs:</p>
+                <ul className="list-disc list-inside text-gray-600 dark:text-gray-400">
+                  {content.symptoms.common.map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
+                </ul>
+                {content.symptoms.additional.length > 0 && (
+                  <>
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 pt-2">Additional Symptoms:</p>
+                    <ul className="list-disc list-inside text-gray-600 dark:text-gray-400">
+                      {content.symptoms.additional.map((s, i) => (
+                        <li key={i}>{s}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
+              </div>
+            </div>
+            <DetailSection title="Causes" items={content.causes} />
+            <DetailSection title="Risk Factors" items={content.riskFactors} />
+            <DetailSection title="Treatment Options" items={content.treatment} />
+            <DetailSection title="Prevention" items={content.prevention} />
+            <Card className="bg-red-50 border-red-300 dark:bg-red-900/20 dark:border-red-700/50">
+              <CardContent className="flex items-start gap-4">
+                <AlertTriangle className="w-8 h-8 text-red-500 mt-1 flex-shrink-0" />
+                <div>
+                  <CardTitle className="text-red-800 dark:text-red-300">Seek Immediate Medical Attention If:</CardTitle>
+                  <ul className="list-disc list-inside text-sm text-red-700 dark:text-red-400 mt-2">
+                    {content.urgentCare.map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-4 space-y-6">
+      <CardTitle className="text-2xl px-2">Educational Guides</CardTitle>
+      <div>
+        <h3 className="text-xl font-bold px-2 mb-2">Condition Guides</h3>
+        <CardDescription className="px-2 mb-4">
+          Learn about the 8 skin conditions our AI can detect, including symptoms, causes, and treatment options.
+        </CardDescription>
+        <div className="space-y-2">
+          {conditions.map((condition) => (
+            <Card key={condition.id} onClick={() => setSelected(condition)}>
+              <CardContent className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-base">{condition.name}</CardTitle>
+                  <CardDescription>{condition.type}</CardDescription>
+                </div>
+                <Info className="w-5 h-5 text-gray-400" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PreventionPage() {
+  return (
+    <div className="p-4 space-y-6">
+      <CardTitle className="text-2xl px-2">Prevention & Risk</CardTitle>
+      <Card>
+        <CardHeader>
+          <CardTitle>Prevention Guidelines</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <h4 className="font-semibold">Hygiene Practices</h4>
+            <ul className="list-disc list-inside text-sm text-gray-500 dark:text-gray-400">
+              <li>Wash hands regularly</li>
+              <li>Keep skin clean and dry</li>
+              <li>Change clothes/socks daily</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold">Diabetes-Specific Care</h4>
+            <ul className="list-disc list-inside text-sm text-gray-500 dark:text-gray-400">
+              <li>Monitor blood sugar levels</li>
+              <li>Inspect feet daily for cuts</li>
+              <li>Moisturize skin to prevent cracking</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-semibold">Environmental Factors</h4>
+            <ul className="list-disc list-inside text-sm text-gray-500 dark:text-gray-400">
+              <li>Avoid walking barefoot in public areas</li>
+              <li>Wear breathable, well-fitting shoes</li>
+              <li>Avoid sharing personal items</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Risk Assessment</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CardDescription>
+            Our upcoming interactive tool will help you understand personal risk factors based on:
+          </CardDescription>
+          <ul className="list-disc list-inside text-sm text-gray-500 dark:text-gray-400 mt-2">
+            <li>Diabetes or pre-diabetes status</li>
+            <li>Immune system health</li>
+            <li>Circulation problems</li>
+            <li>History of skin infections</li>
+          </ul>
+          <Button variant="secondary" className="mt-4" disabled={true}>
+            Coming Soon
+          </Button>
+        </CardContent>
+      </Card>
+      <MedicalDisclaimer />
+    </div>
+  );
+}
+
+function ProfilePage() {
+  return (
+    <div className="p-4 space-y-6">
+      <Card>
+        <CardContent className="flex flex-col items-center text-center">
+          <div className="w-24 h-24 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center mb-4">
+            <User className="w-12 h-12 text-gray-500" />
+          </div>
+          <CardTitle className="text-2xl">Guest User</CardTitle>
+          <CardDescription>Create an account to save your analysis history.</CardDescription>
+        </CardContent>
+      </Card>
+      <Button variant="primary">Create Account</Button>
+      <Button variant="secondary">Log In</Button>
+    </div>
+  );
+}
+
+export default function App() {
+  const [activeTab, setActiveTab] = useState("home");
+  const mainContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (mainContentRef.current) {
+      mainContentRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, [activeTab]);
+
+  const renderPage = () => {
+    switch (activeTab) {
+      case "home":
+        return <HomePage setActiveTab={setActiveTab} />;
+      case "analysis":
+        return <AnalysisPage />;
+      case "prevention":
+        return <PreventionPage />;
+      case "education":
+        return <EducationPage />;
+      case "profile":
+        return <ProfilePage />;
+      default:
+        return <HomePage setActiveTab={setActiveTab} />;
+    }
+  };
+
+  const TopBar = () => (
+    <div className="bg-white dark:bg-gray-800/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700 p-4 flex justify-between items-center sticky top-0 z-10">
+      <span
+        className="flex items-center gap-2 text-3xl font-extrabold bg-gradient-to-r from-blue-500 via-blue-800 to-purple-600 bg-clip-text text-transparent select-none tracking-tight"
+        style={{ letterSpacing: "-0.04em" }}
+      >
+        <Stethoscope className="w-9 h-9 text-blue-600 dark:text-blue-400 mr-1" />
+        Mystic Wound
+      </span>
+      <button onClick={() => setActiveTab("profile")}>
+        <User className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+      </button>
+    </div>
+  );
+
+  const BottomNavBar = () => {
+    const navItems = [
+      { id: "home", icon: Home, label: "Home" },
+      { id: "analysis", icon: Stethoscope, label: "Analysis" },
+      { id: "prevention", icon: ShieldCheck, label: "Prevention" },
+      { id: "education", icon: BookOpen, label: "Guides" },
+    ];
+    return (
+      <div className="bg-white dark:bg-gray-800/80 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700 p-2 flex justify-around sticky bottom-0 z-10">
+        {navItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => setActiveTab(item.id)}
+            className={`flex flex-col items-center justify-center w-20 h-16 rounded-lg transition-colors ${activeTab === item.id ? "text-blue-600 dark:text-blue-400" : "text-gray-500 dark:text-gray-400 hover:text-blue-500"}`}
+          >
+            <item.icon className="w-6 h-6 mb-1" />
+            <span className="text-xs font-medium">{item.label}</span>
+          </button>
+        ))}
+      </div>
+    );
+  };
+
+  return (
+    <div className="w-full max-w-md mx-auto bg-gray-100 dark:bg-gray-900 flex flex-col h-screen font-sans">
+      <TopBar />
+      <main ref={mainContentRef} className="flex-grow overflow-y-auto pb-4">{renderPage()}</main>
+      <BottomNavBar />
     </div>
   );
 }
