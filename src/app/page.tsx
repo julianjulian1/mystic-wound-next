@@ -1,13 +1,13 @@
 "use client";
 import * as React from "react";
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import {
   Home,
   Stethoscope,
   BookOpen,
   User,
   Camera,
-  ShieldAlert,
   FileText,
   HeartPulse,
   BrainCircuit,
@@ -32,7 +32,13 @@ function HomePage({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
     <div className="p-4 space-y-6">
       <Card className="bg-gradient-to-r from-yellow-100 to-red-100 dark:from-yellow-900/30 dark:to-red-900/30 border-yellow-300 dark:border-yellow-700/50">
         <CardContent className="flex flex-col md:flex-row items-center gap-4">
-          <img src="/dfu.jpg" alt="Diabetic Foot Ulcer" className="w-28 h-20 object-cover rounded-lg border border-yellow-300 dark:border-yellow-700/50" />
+          <Image
+            src="/dfu.jpg"
+            alt="Diabetic Foot Ulcer"
+            width={112}
+            height={80}
+            className="object-cover rounded-lg border border-yellow-300 dark:border-yellow-700/50"
+          />
           <div className="flex-1">
             <CardTitle className="text-xl text-yellow-800 dark:text-yellow-300">Diabetic Foot Ulcer (DFU) Analysis</CardTitle>
             <CardDescription className="text-yellow-700 dark:text-yellow-400 mb-2">
@@ -123,35 +129,25 @@ function HomePage({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
   );
 }
 
-function DFUAnalysisPage() {
-  // Placeholder for DFU analysis UI
-  return (
-    <div className="p-4 space-y-4">
-      <CardTitle className="text-2xl px-2">DFU Analysis</CardTitle>
-      <Card>
-        <CardContent>
-          <CardTitle>Diabetic Foot Ulcer Detection</CardTitle>
-          <CardDescription>
-            Upload a clear photo of the foot ulcer. The AI will analyze the stage of the ulcer and detect possible infections.
-          </CardDescription>
-          <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-            <ul className="list-disc list-inside">
-              <li>Stage classification (e.g., superficial, deep, necrotic)</li>
-              <li>Infection detection (bacterial, fungal, etc.)</li>
-              <li>Coming soon: detailed wound tissue analysis</li>
-            </ul>
-          </div>
-        </CardContent>
-      </Card>
-      <MedicalDisclaimer />
-    </div>
-  );
-}
+type SkinResult = {
+  type: 'skin';
+  condition: Condition;
+  confidence: number;
+};
+
+type DfuResult = {
+  type: 'dfu';
+  stage: string;
+  infection: string;
+  confidence: number;
+};
+
+type AnalysisResult = SkinResult | DfuResult;
 
 function AnalysisPage() {
   const [mode, setMode] = useState<'dfu' | 'skin'>('skin');
   const [file, setFile] = useState<File & { preview?: string } | null>(null);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -204,9 +200,15 @@ function AnalysisPage() {
         >
           <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
           <Camera className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-          {file ? (
+          {file && file.preview ? (
             <div>
-              <img src={file.preview} alt="Preview" className="max-h-48 mx-auto rounded-lg mb-4" />
+              <Image
+                src={file.preview}
+                alt="Preview"
+                width={300}
+                height={192}
+                className="max-h-48 w-auto mx-auto rounded-lg mb-4"
+              />
               <p className="font-semibold text-gray-800 dark:text-gray-200">{file.name}</p>
             </div>
           ) : (
@@ -222,14 +224,20 @@ function AnalysisPage() {
           {isLoading ? "Analyzing..." : "Analyze Now"}
         </Button>
       )}
-      {result && mode === 'skin' && (
+      {result && result.type === 'skin' && (
         <div>
           <Card>
             <CardHeader>
               <CardTitle>Analysis Results</CardTitle>
             </CardHeader>
             <CardContent>
-              <img src={result.condition.image} alt={result.condition.name} className="w-full h-40 object-cover rounded-lg mb-4" />
+              <Image
+                src={result.condition.image}
+                alt={result.condition.name}
+                width={500}
+                height={160}
+                className="w-full h-40 object-cover rounded-lg mb-4"
+              />
               <CardDescription>Potential Condition:</CardDescription>
               <CardTitle className="text-2xl text-blue-600 dark:text-blue-400">{result.condition.name}</CardTitle>
               <div className="flex items-center justify-between mt-4">
@@ -250,14 +258,20 @@ function AnalysisPage() {
           </Button>
         </div>
       )}
-      {result && mode === 'dfu' && (
+      {result && result.type === 'dfu' && (
         <div>
           <Card>
             <CardHeader>
               <CardTitle>DFU Analysis Results</CardTitle>
             </CardHeader>
             <CardContent>
-              <img src="/dfu.jpg" alt="Diabetic Foot Ulcer" className="w-full h-40 object-cover rounded-lg mb-4" />
+              <Image
+                src="/dfu.jpg"
+                alt="Diabetic Foot Ulcer"
+                width={500}
+                height={160}
+                className="w-full h-40 object-cover rounded-lg mb-4"
+              />
               <div className="flex items-center justify-between mt-4">
                 <span className="text-gray-500 dark:text-gray-400">Stage:</span>
                 <span className="font-bold text-lg">{result.stage}</span>
@@ -311,7 +325,13 @@ function EducationPage() {
           &larr; Back to Guides
         </Button>
         <Card>
-          <img src={content.image} alt={content.name} className="w-full h-48 object-cover rounded-t-xl" />
+          <Image
+            src={content.image}
+            alt={content.name}
+            width={500}
+            height={192}
+            className="w-full h-48 object-cover rounded-t-xl"
+          />
           <CardHeader>
             <CardTitle className="text-2xl">{content.name}</CardTitle>
             <CardDescription>{content.type}</CardDescription>
