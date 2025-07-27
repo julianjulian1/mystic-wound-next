@@ -17,6 +17,22 @@ export type Condition = {
 
 export const conditions: Condition[] = [
   {
+    id: 'dfu',
+    name: 'Diabetic Foot Ulcer (DFU)',
+    type: 'Diabetic Wound',
+    overview: 'A Diabetic Foot Ulcer (DFU) is an open sore or wound that occurs in approximately 15% of patients with diabetes and is commonly located on the bottom of the foot. DFUs are a major cause of morbidity and can lead to serious complications including infection and amputation if not managed properly.',
+    symptoms: {
+      common: ['Open sore or wound on the foot', 'Swelling, redness, and warmth around the wound', 'Drainage from the wound', 'Odor from the wound', 'Pain or tenderness in the affected area'],
+      additional: ['Fever or chills (if infected)', 'Black tissue (necrosis)', 'Numbness or tingling', 'Delayed healing']
+    },
+    causes: ['Poor blood circulation', 'High blood sugar levels', 'Nerve damage (neuropathy)', 'Foot trauma or pressure', 'Infection'],
+    riskFactors: ['Diabetes mellitus', 'Peripheral neuropathy', 'Poor glycemic control', 'History of foot ulcers', 'Foot deformities', 'Smoking', 'Kidney disease'],
+    treatment: ['Blood sugar control', 'Wound cleaning and dressing', 'Debridement (removal of dead tissue)', 'Antibiotics for infection', 'Offloading pressure from the foot', 'Surgical intervention if needed'],
+    prevention: ['Daily foot inspection', 'Proper foot hygiene', 'Wearing appropriate footwear', 'Regular medical check-ups', 'Prompt treatment of minor foot injuries'],
+    urgentCare: ['Signs of spreading infection (redness, swelling, warmth)', 'Fever or chills', 'Black or foul-smelling tissue', 'Rapidly worsening pain', 'Non-healing wound', 'Signs of sepsis (confusion, rapid heartbeat)'],
+    image: '/dfu.jpg'
+  },
+  {
     id: 'ba-cellulitis',
     name: 'BA-Cellulitis',
     type: 'Bacterial Infection',

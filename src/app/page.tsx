@@ -99,7 +99,33 @@ function HomePage({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
   );
 }
 
+function DFUAnalysisPage() {
+  // Placeholder for DFU analysis UI
+  return (
+    <div className="p-4 space-y-4">
+      <CardTitle className="text-2xl px-2">DFU Analysis</CardTitle>
+      <Card>
+        <CardContent>
+          <CardTitle>Diabetic Foot Ulcer Detection</CardTitle>
+          <CardDescription>
+            Upload a clear photo of the foot ulcer. The AI will analyze the stage of the ulcer and detect possible infections.
+          </CardDescription>
+          <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+            <ul className="list-disc list-inside">
+              <li>Stage classification (e.g., superficial, deep, necrotic)</li>
+              <li>Infection detection (bacterial, fungal, etc.)</li>
+              <li>Coming soon: detailed wound tissue analysis</li>
+            </ul>
+          </div>
+        </CardContent>
+      </Card>
+      <MedicalDisclaimer />
+    </div>
+  );
+}
+
 function AnalysisPage() {
+  const [mode, setMode] = useState<'dfu' | 'skin'>('skin');
   const [file, setFile] = useState<File & { preview?: string } | null>(null);
   const [result, setResult] = useState<{ condition: Condition; confidence: number } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -130,59 +156,69 @@ function AnalysisPage() {
 
   return (
     <div className="p-4 space-y-4">
-      <CardTitle className="text-2xl px-2">AI-Powered Analysis</CardTitle>
-      {!result && (
-        <div
-          onClick={() => fileInputRef.current?.click()}
-          className="p-8 border-2 border-dashed rounded-xl text-center cursor-pointer border-gray-300 dark:border-gray-600 hover:border-blue-400"
-        >
-          <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
-          <Camera className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-          {file ? (
-            <div>
-              <img src={file.preview} alt="Preview" className="max-h-48 mx-auto rounded-lg mb-4" />
-              <p className="font-semibold text-gray-800 dark:text-gray-200">{file.name}</p>
-            </div>
-          ) : (
-            <div>
-              <p className="text-gray-500 dark:text-gray-400">Click to select an image.</p>
-              <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">Use clear, well-lit images for best results.</p>
+      <div className="flex items-center gap-4 mb-2">
+        <Button variant={mode === 'skin' ? 'primary' : 'secondary'} onClick={() => setMode('skin')}>Skin Disease Type</Button>
+        <Button variant={mode === 'dfu' ? 'primary' : 'secondary'} onClick={() => setMode('dfu')}>DFU Check</Button>
+      </div>
+      {mode === 'skin' ? (
+        <>
+          <CardTitle className="text-2xl px-2">AI-Powered Analysis</CardTitle>
+          {!result && (
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className="p-8 border-2 border-dashed rounded-xl text-center cursor-pointer border-gray-300 dark:border-gray-600 hover:border-blue-400"
+            >
+              <input type="file" accept="image/*" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
+              <Camera className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+              {file ? (
+                <div>
+                  <img src={file.preview} alt="Preview" className="max-h-48 mx-auto rounded-lg mb-4" />
+                  <p className="font-semibold text-gray-800 dark:text-gray-200">{file.name}</p>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-gray-500 dark:text-gray-400">Click to select an image.</p>
+                  <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">Use clear, well-lit images for best results.</p>
+                </div>
+              )}
             </div>
           )}
-        </div>
-      )}
-      {file && !result && (
-        <Button onClick={handleAnalyze} disabled={isLoading}>
-          {isLoading ? "Analyzing..." : "Analyze Now"}
-        </Button>
-      )}
-      {result && (
-        <div>
-          <Card>
-            <CardHeader>
-              <CardTitle>Analysis Results</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <img src={result.condition.image} alt={result.condition.name} className="w-full h-40 object-cover rounded-lg mb-4" />
-              <CardDescription>Potential Condition:</CardDescription>
-              <CardTitle className="text-2xl text-blue-600 dark:text-blue-400">{result.condition.name}</CardTitle>
-              <div className="flex items-center justify-between mt-4">
-                <span className="text-gray-500 dark:text-gray-400">Confidence Score:</span>
-                <span className="font-bold text-lg">{(result.confidence * 100).toFixed(1)}%</span>
+          {file && !result && (
+            <Button onClick={handleAnalyze} disabled={isLoading}>
+              {isLoading ? "Analyzing..." : "Analyze Now"}
+            </Button>
+          )}
+          {result && (
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Analysis Results</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <img src={result.condition.image} alt={result.condition.name} className="w-full h-40 object-cover rounded-lg mb-4" />
+                  <CardDescription>Potential Condition:</CardDescription>
+                  <CardTitle className="text-2xl text-blue-600 dark:text-blue-400">{result.condition.name}</CardTitle>
+                  <div className="flex items-center justify-between mt-4">
+                    <span className="text-gray-500 dark:text-gray-400">Confidence Score:</span>
+                    <span className="font-bold text-lg">{(result.confidence * 100).toFixed(1)}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-1">
+                    <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${result.confidence * 100}%` }}></div>
+                  </div>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mt-4">{result.condition.overview}</p>
+                </CardContent>
+              </Card>
+              <div className="mt-4">
+                <MedicalDisclaimer />
               </div>
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-1">
-                <div className="bg-blue-600 h-2.5 rounded-full" style={{ width: `${result.confidence * 100}%` }}></div>
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mt-4">{result.condition.overview}</p>
-            </CardContent>
-          </Card>
-          <div className="mt-4">
-            <MedicalDisclaimer />
-          </div>
-          <Button onClick={handleReset} variant="secondary" className="mt-4">
-            <Camera className="w-5 h-5" />Analyze Another Image
-          </Button>
-        </div>
+              <Button onClick={handleReset} variant="secondary" className="mt-4">
+                <Camera className="w-5 h-5" />Analyze Another Image
+              </Button>
+            </div>
+          )}
+        </>
+      ) : (
+        <DFUAnalysisPage />
       )}
     </div>
   );
@@ -366,6 +402,25 @@ function ProfilePage() {
   );
 }
 
+function AboutPage() {
+  return (
+    <div className="p-4 space-y-6">
+      <Card>
+        <CardContent>
+          <CardTitle className="text-2xl mb-2">About Mystic-Wound</CardTitle>
+          <CardDescription>
+            Mystic-Wound: An Artificial Intelligence-Based Diabetic Wound Analysis Platform for Early Detection and Monitoring
+          </CardDescription>
+          <div className="mt-4 text-gray-700 dark:text-gray-300">
+            <p><strong>Researchers:</strong> M. Fakhrizal Gathfan Putra Adinata, Muhammad Rifansyah Rasendriya Juno</p>
+            <p><strong>Institution:</strong> SMA TARUNA NUSANTARA, Jalan Raya Purworejo KM. 5, Magelang Regency, Central Java, Indonesia</p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
 export default function App() {
   const [activeTab, setActiveTab] = useState("home");
   const mainContentRef = useRef<HTMLDivElement>(null);
@@ -388,6 +443,8 @@ export default function App() {
         return <EducationPage />;
       case "profile":
         return <ProfilePage />;
+      case "about":
+        return <AboutPage />;
       default:
         return <HomePage setActiveTab={setActiveTab} />;
     }
@@ -402,9 +459,17 @@ export default function App() {
         <Stethoscope className="w-9 h-9 text-blue-600 dark:text-blue-400 mr-1" />
         Mystic Wound
       </span>
-      <button onClick={() => setActiveTab("profile")}>
-        <User className="w-6 h-6 text-gray-500 dark:text-gray-400" />
-      </button>
+      <div className="flex gap-2">
+        <button
+          onClick={() => setActiveTab("about")}
+          className="text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 px-3 py-1 rounded transition-colors"
+        >
+          About
+        </button>
+        <button onClick={() => setActiveTab("profile")}>
+          <User className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+        </button>
+      </div>
     </div>
   );
 
