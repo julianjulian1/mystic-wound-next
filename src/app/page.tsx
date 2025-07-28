@@ -129,6 +129,15 @@ function HomePage({ setActiveTab }: { setActiveTab: (tab: string) => void }) {
   );
 }
 
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[];
+  readonly userChoice: Promise<{
+    outcome: "accepted" | "dismissed";
+    platform: string;
+  }>;
+  prompt(): Promise<void>;
+}
+
 type SkinResult = {
   type: 'skin';
   condition: Condition;
@@ -509,6 +518,8 @@ function AboutPage() {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("home");
+  const [installPrompt, setInstallPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
   const mainContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -516,6 +527,31 @@ export default function App() {
       mainContentRef.current.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [activeTab]);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e as BeforeInstallPromptEvent);
+    };
+
+    window.addEventListener("beforeinstallprompt", handler);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handler);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!installPrompt) {
+      return;
+    }
+    installPrompt.prompt();
+    const { outcome } = await installPrompt.userChoice;
+    if (outcome === "accepted") {
+      console.log("User accepted the A2HS prompt");
+    }
+    setInstallPrompt(null);
+  };
 
   const renderPage = () => {
     switch (activeTab) {
@@ -587,6 +623,31 @@ export default function App() {
       <TopBar />
       <main ref={mainContentRef} className="flex-grow overflow-y-auto pb-4">{renderPage()}</main>
       <BottomNavBar />
+      {installPrompt && (
+        <div className="fixed bottom-24 right-4 left-4 sm:left-auto sm:right-4 z-20">
+          <Card className="bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700 max-w-sm mx-auto sm:mx-0">
+            <CardContent className="p-4">
+              <div className="flex items-start gap-4">
+                <div className="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-full mt-1 flex-shrink-0">
+                  <Zap className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div className="flex-grow">
+                  <CardTitle className="text-base">Install Mystic Wound</CardTitle>
+                  <CardDescription className="text-sm">
+                    Add to home screen for a better experience and offline access.
+                  </CardDescription>
+                </div>
+              </div>
+              <div className="flex gap-2 mt-4">
+                <Button onClick={() => setInstallPrompt(null)} variant="secondary" className="w-full">
+                  Not Now
+                </Button>
+                <Button onClick={handleInstallClick} variant="primary" className="w-full">Install</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }

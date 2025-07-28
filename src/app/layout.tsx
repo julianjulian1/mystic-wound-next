@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     title: "Mystic Wound",
     // startUpImage: [],
   },
+  icons: {
+    icon: "/icons/icon-192x192.png",
+  },
 };
 
 export default function RootLayout({
@@ -32,9 +35,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <head>
+        <link rel="icon" href="/icons/icon-192x192.png" />
+        {/* ...other head elements... */}
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>
