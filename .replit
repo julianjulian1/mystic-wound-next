@@ -1,0 +1,12 @@
+modules = ["nodejs-20", "web"]
+run = "npm run build && npx serve@latest out/"
+
+[nix]
+channel = "stable-25_05"
+
+[deployment]
+run = ["sh", "-c", "npm run build && npx serve@latest out/"]
+
+[[ports]]
+localPort = 3000
+externalPort = 80
