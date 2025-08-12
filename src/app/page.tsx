@@ -1,37 +1,27 @@
 "use client";
 import * as React from "react";
 import { useState, useRef, useEffect } from "react";
-import Image from "next/image";
 import {
   Home,
   Stethoscope,
   BookOpen,
   User,
-  Camera,
-  FileText,
-  HeartPulse,
-  BrainCircuit,
-  Info,
   Zap,
   ShieldCheck,
-  AlertTriangle,
 } from "@/components/icons";
 import {
   Card,
-  CardHeader,
   CardContent,
   CardTitle,
   CardDescription,
 } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { MedicalDisclaimer } from "@/components/MedicalDisclaimer";
-import { conditions, Condition } from "@/data/conditions";
-import { HomePage } from "@/pages/HomePage";
-import { AnalysisPage } from "@/pages/AnalysisPage";
-import { EducationPage } from "@/pages/EducationPage";
-import { PreventionPage } from "@/pages/PreventionPage";
-import { ProfilePage } from "@/pages/ProfilePage";
-import { AboutPage } from "@/pages/AboutPage";
+import { HomePage } from "@/components/pages/HomePage";
+import { AnalysisPage } from "@/components/pages/AnalysisPage";
+import { EducationPage } from "@/components/pages/EducationPage";
+import { PreventionPage } from "@/components/pages/PreventionPage";
+import { ProfilePage } from "@/components/pages/ProfilePage";
+import { AboutPage } from "@/components/pages/AboutPage";
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
